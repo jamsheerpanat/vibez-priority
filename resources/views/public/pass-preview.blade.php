@@ -9,205 +9,293 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --coffee-deep: #2c1810;
-            --coffee-mocha: #442b21;
-            --coffee-cream: #f5f5e6;
+            --coffee-deep: #1a0f0a;
+            --coffee-mocha: #2d1b14;
             --coffee-accent: #d4a373;
+            --coffee-cream: #f5f5e6;
         }
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #1a1a1a;
+            background-color: #050505;
             color: var(--coffee-cream);
         }
 
-        .pass-card {
-            aspect-ratio: 1 / 1.586;
-            background: var(--coffee-deep);
-            border-radius: 2rem;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9);
-            max-width: 320px;
+        .pass-container {
+            width: 100%;
+            max-width: 340px;
             margin: 0 auto;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
         }
 
-        .pass-bg-image {
+        .pass-card {
+            width: 100%;
+            aspect-ratio: 1 / 1.6;
+            background: var(--coffee-deep);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Notch Cutout */
+        .pass-card::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 40px;
+            background: #050505;
+            border-radius: 50%;
+            z-index: 20;
+        }
+
+        .pass-bg {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.6;
-            mix-blend-mode: soft-light;
+            opacity: 0.7;
+            filter: brightness(0.5) contrast(1.2);
         }
 
         .pass-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(44, 24, 16, 0.4) 0%, rgba(44, 24, 16, 0.95) 80%);
+            background: linear-gradient(180deg,
+                    rgba(26, 15, 10, 0.2) 0%,
+                    rgba(26, 15, 10, 0.6) 40%,
+                    rgba(26, 15, 10, 0.95) 85%);
             z-index: 5;
         }
 
+        /* Ticket Content */
+        .pass-content {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
         .pass-header {
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero-section {
-            width: 100%;
-            height: 120px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 10;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
         }
 
-        .hero-logo-container {
-            width: 100px;
-            height: 100px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            border: 4px solid var(--coffee-mocha);
-            overflow: hidden;
+        .header-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--coffee-accent);
         }
 
-        .hero-logo {
-            width: 70%;
-            height: 70%;
-            object-fit: contain;
+        .header-text {
+            font-size: 0.7rem;
+            font-black;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: white;
         }
 
-        .pass-body {
-            padding: 1.5rem;
-            position: relative;
-            z-index: 10;
+        .primary-fields {
+            margin-top: 1rem;
         }
 
         .label {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             text-transform: uppercase;
-            letter-spacing: 0.25em;
+            letter-spacing: 0.15em;
             color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 0.2rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .value-large {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .secondary-section {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .secondary-fields {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .value-mid {
+            font-size: 1rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        /* Circular Side Image Badge */
+        .thumbnail-container {
+            width: 84px;
+            height: 84px;
+            background: white;
+            border-radius: 50%;
+            padding: 4px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 3px solid var(--coffee-mocha);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thumbnail-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        /* Barcode Section */
+        .barcode-section {
+            background: white;
+            margin: auto 0 0.5rem;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .barcode-img {
+            width: 100%;
+            height: 60px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .barcode-id {
+            font-family: monospace;
+            font-size: 0.65rem;
+            color: #000;
+            letter-spacing: 0.2em;
             font-weight: 700;
         }
 
-        .value {
-            font-size: 1.15rem;
-            font-weight: 900;
-            color: white;
-            letter-spacing: -0.01em;
-        }
-
-        .tier-badge {
-            background: linear-gradient(90deg, #d4a373, #faedcd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900;
-            letter-spacing: 0.05em;
-            font-size: 0.9rem;
-        }
-
-        .qr-container {
-            background: white;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            width: fit-content;
-            margin: 1.5rem auto 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+        .pass-footer-info {
+            position: relative;
+            z-index: 10;
             padding: 1rem;
             text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            font-size: 0.55rem;
-            letter-spacing: 0.15em;
-            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.5rem;
+            color: rgba(255, 255, 255, 0.2);
             text-transform: uppercase;
-            z-index: 10;
+            letter-spacing: 0.3em;
+        }
+
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--coffee-accent);
+            color: var(--coffee-deep);
+            text-align: center;
+            border-radius: 1.25rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.75rem;
+            margin-top: 2.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(212, 163, 115, 0.2);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 163, 115, 0.3);
         }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center p-6 bg-neutral-950">
-    <div class="w-full max-w-sm">
+<body class="min-h-screen flex flex-col items-center justify-center p-6 pb-12">
+    <div class="pass-container">
         <div class="pass-card">
-            <!-- New Vector Texture Background -->
-            <img src="{{ asset('images/background-coffee.png') }}" class="pass-bg-image" alt="Texture">
+            <!-- Background Image -->
+            <img src="{{ asset('images/background-coffee.png') }}" class="pass-bg" alt="Vibez Background">
             <div class="pass-overlay"></div>
 
-            <!-- Single Logo Header -->
-            <div class="pass-header">
-                <span class="text-[0.55rem] font-black tracking-[0.5em] uppercase text-white/40">Exclusive
-                    Membership</span>
-            </div>
-
-            <!-- Hero Ticket Section -->
-            <div class="hero-section">
-                <!-- Circular Thumbnail Logo -->
-                <div class="hero-logo-container">
-                    <img src="{{ asset('images/icon.png') }}" class="hero-logo" alt="Vibez">
-                </div>
-            </div>
-
-            <!-- Content -->
-            <div class="pass-body space-y-5">
-                <div class="text-center mb-4">
-                    <div class="label">Member</div>
-                    <div class="value text-2xl tracking-tighter">{{ strtoupper($user->full_name) }}</div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 pt-2 border-t border-white/5">
-                    <div>
-                        <div class="label">Status</div>
-                        <div class="tier-badge">
-                            {{ $user->user_type === 'employee' ? 'VIBEZ PREMIUM' : 'VIBEZ INSIDER' }}</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="label">Points</div>
-                        <div class="value text-lg">1,250</div>
-                    </div>
-                </div>
-
-                <!-- QR Code Section -->
-                <div class="qr-container">
-                    <svg width="80" height="80" viewBox="0 0 24 24" fill="black">
-                        <path
-                            d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2z">
-                        </path>
+            <div class="pass-content">
+                <!-- Header -->
+                <div class="pass-header">
+                    <svg class="header-icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.5 3H5.5C4.12 3 3 4.12 3 5.5v13C3 19.88 4.12 21 5.5 21h13c1.38 0 2.5-1.12 2.5-2.5v-13C21 4.12 19.88 3 18.5 3zM12 17l-1.5-1.5L14 12l-3.5-3.5L12 7l5 5-5 5z"/>
                     </svg>
+                    <span class="header-text">VIBEZ EXPERIENCE</span>
+                </div>
+
+                <!-- Primary Membership Field -->
+                <div class="primary-fields">
+                    <div class="label">Member</div>
+                    <div class="value-large">{{ strtoupper($user->full_name) }}</div>
+                </div>
+
+                <!-- Secondary Section with Thumbnail -->
+                <div class="secondary-section">
+                    <div class="secondary-fields">
+                        <div>
+                            <div class="label">Membership</div>
+                            <div class="value-mid">{{ $user->user_type === 'employee' ? 'VIBEZ PREMIUM' : 'VIBEZ INSIDER' }}</div>
+                        </div>
+                        <div>
+                            <div class="label">Points Balance</div>
+                            <div class="value-mid">1,250 PTS</div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side Circular Logo -->
+                    <div class="thumbnail-container">
+                        <img src="{{ asset('images/icon.png') }}" class="thumbnail-img" alt="Vibez Logo">
+                    </div>
+                </div>
+
+                <!-- Barcode Section (Ticket Style) -->
+                <div class="barcode-section">
+                    <div class="barcode-img">
+                        <!-- Simulated PDF417/1D Barcode Pattern -->
+                        <div class="flex gap-[2px] h-full items-center opacity-80">
+                            @for($i = 0; $i < 40; $i++)
+                                <div class="bg-black" style="width:{{ rand(1,4) }}px; height:80%"></div>
+                            @endfor
+                        </div>
+                    </div>
+                    <div class="barcode-id">{{ substr($walletCard->card_serial, 0, 4) }}-{{ substr($walletCard->card_serial, 4, 4) }}-{{ substr($walletCard->card_serial, -4) }}</div>
                 </div>
             </div>
-
-            <div class="footer">
-                Digital Pass ID: {{ substr($walletCard->card_serial, -12) }}
-            </div>
         </div>
 
-        <!-- Action Button -->
-        <div class="mt-12 space-y-4">
-            <div class="bg-white/5 border border-white/10 rounded-3xl p-6 text-center backdrop-blur-md">
-                <p class="text-xs uppercase tracking-widest text-white/40 mb-4">Optimized for VIBEZ Coffee Roasters</p>
-                <a href="{{ url('success/' . $user->uuid) }}"
-                    class="block w-full py-4 bg-[#d4a373] text-[#2c1810] font-black rounded-xl hover:bg-[#c49363] transition shadow-lg text-sm tracking-widest">
-                    BACK TO TERMINAL
-                </a>
-            </div>
+        <div class="pass-footer-info">
+            Verified Digital Identity • Priority Access Enabled
         </div>
+
+        <a href="{{ url('success/' . $user->uuid) }}" class="btn-action">
+            Back to Terminal
+        </a>
     </div>
 </body>
 

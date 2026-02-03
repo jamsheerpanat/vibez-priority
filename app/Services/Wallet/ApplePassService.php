@@ -18,11 +18,11 @@ class ApplePassService
             'serialNumber' => $walletCard->card_serial,
             'teamIdentifier' => env('APPLE_TEAM_ID', '2RZSDZ3JFQ'),
             'organizationName' => 'VIBEZ COFFEE',
-            'description' => 'VIBEZ PREMIUM LOYALTY',
-            'logoText' => 'VIBEZ COFFEE',
+            'description' => 'VIBEZ PREMIUM MEMBERSHIP',
+            'logoText' => 'VIBEZ',
             'foregroundColor' => 'rgb(255, 255, 255)',
-            'backgroundColor' => 'rgb(44, 24, 16)',
-            'labelColor' => 'rgba(255, 255, 255, 0.6)',
+            'backgroundColor' => 'rgb(26, 15, 10)',
+            'labelColor' => 'rgba(255, 255, 255, 0.5)',
             'eventTicket' => [
                 'primaryFields' => [
                     [
@@ -34,35 +34,35 @@ class ApplePassService
                 'secondaryFields' => [
                     [
                         'key' => 'tier',
-                        'label' => 'STATUS',
-                        'value' => 'VIBEZ PLATINUM',
+                        'label' => 'MEMBERSHIP',
+                        'value' => $user->user_type === 'employee' ? 'VIBEZ PREMIUM' : 'VIBEZ INSIDER',
                     ],
                 ],
                 'auxiliaryFields' => [
                     [
                         'key' => 'points',
-                        'label' => 'POINTS',
-                        'value' => '1,250',
+                        'label' => 'POINTS BALANCE',
+                        'value' => '1,250 PTS',
                     ],
                 ],
                 'backFields' => [
                     [
                         'key' => 'about',
-                        'label' => 'VIBEZ EXPERIENCE',
-                        'value' => 'Artisanal roasts and premium community vibez.',
+                        'label' => 'VIBEZ HQ',
+                        'value' => 'Verified Digital Identity. This pass grants you priority access to artisanal roasts and exclusive community events.',
                     ],
                 ],
             ],
             'barcodes' => [
                 [
                     'message' => $walletCard->card_serial,
-                    'format' => 'PKBarcodeFormatQR',
+                    'format' => 'PKBarcodeFormatPDF417',
                     'messageEncoding' => 'iso-8859-1',
                 ]
             ],
             'barcode' => [
                 'message' => $walletCard->card_serial,
-                'format' => 'PKBarcodeFormatQR',
+                'format' => 'PKBarcodeFormatPDF417',
                 'messageEncoding' => 'iso-8859-1',
             ],
         ];
