@@ -60,6 +60,11 @@ class ApplePassService
                     'messageEncoding' => 'iso-8859-1',
                 ]
             ],
+            'barcode' => [
+                'message' => $walletCard->card_serial,
+                'format' => 'PKBarcodeFormatQR',
+                'messageEncoding' => 'iso-8859-1',
+            ],
         ];
     }
 

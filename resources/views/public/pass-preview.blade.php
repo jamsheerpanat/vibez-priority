@@ -174,7 +174,8 @@
                 <div class="grid grid-cols-2 gap-4 pt-2 border-t border-white/5">
                     <div>
                         <div class="label">Status</div>
-                        <div class="tier-badge">PLATINUM</div>
+                        <div class="tier-badge">
+                            {{ $user->user_type === 'employee' ? 'VIBEZ PREMIUM' : 'VIBEZ INSIDER' }}</div>
                     </div>
                     <div class="text-right">
                         <div class="label">Points</div>
