@@ -342,19 +342,31 @@
                         </svg>
                     </div>
 
-                    <!-- Member Identity -->
+                    <!-- MEMBER IDENTITY -->
                     <div class="primary-fields">
                         <div class="label">Priority Member</div>
                         <div class="value-name">{{ strtoupper($user->full_name) }}</div>
                     </div>
 
-                    <!-- Status and Perks -->
+                    @if(isset($error))
+                        <div class="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                            <p class="text-[0.6rem] text-red-400 uppercase tracking-widest font-bold">
+                                ⚠️ Pass Generation Issue
+                            </p>
+                            <p class="text-[0.55rem] text-white/60 mt-1 leading-relaxed">
+                                {{ $error }}
+                            </p>
+                        </div>
+                    @endif
+
+                    <!-- STATUS AND PERKS -->
                     <div class="secondary-section">
                         <div class="info-grid">
                             <div>
                                 <div class="label">Membership</div>
                                 <div class="value-status">
-                                    {{ $user->user_type === 'employee' ? 'VIBEZ PREMIUM' : 'VIBEZ INSIDER' }}</div>
+                                    {{ $user->user_type === 'employee' ? 'VIBEZ PREMIUM' : 'VIBEZ INSIDER' }}
+                                </div>
                             </div>
                             <div>
                                 <div class="label">Roast Points</div>
@@ -389,8 +401,9 @@
                 Encrypted Mobile Identity • Verified at VIBEZ HQ
             </div>
 
-            <a href="{{ url('success/' . $user->uuid) }}" class="action-button">
-                Done
+            <a href="{{ url('/success/' . $user->uuid) }}" class="action-button"
+                style="cursor: pointer; position: relative; z-index: 50;">
+                DONE
             </a>
         </div>
     </div>

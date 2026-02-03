@@ -86,9 +86,25 @@ class ApplePassService
     public function generatePkpass(User $user, WalletCard $walletCard)
     {
         if (!$this->areCertificatesConfigured()) {
+            $missing = [];
+            if (!file_exists(storage_path('app/certs/apple_pass_cert.pem')))
+                $missing[] = 'apple_pass_cert.pem';
+            if (!file_exists(storage_path('app/certs/apple_pass_key.pem')))
+                $missing[] = 'apple_pass_key.pem';
+            if (!file_exists(storage_path('app/certs/wwdr.pem')))
+                $missing[] = 'wwdr.pem';
+
             return [
                 'success' => false,
-                'message' => 'Apple Wallet certificates not configured.',
+                'message' => 'Apple Wallet certificates are not fully configured. Missing: ' . implode(', ', $missing) . '. Please upload these to storage/app/certs/ on your server.',
+                'pass_data' => $this->buildUnsignedPassData($user, $walletCard),
+            ];
+        }
+
+        if (!env('APPLE_PASS_TYPE_ID') || !env('APPLE_TEAM_ID')) {
+            return [
+                'success' => false,
+                'message' => 'Apple IDs (Pass Type ID or Team ID) are missing from your .env file on Hostinger.',
                 'pass_data' => $this->buildUnsignedPassData($user, $walletCard),
             ];
         }
