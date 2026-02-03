@@ -173,14 +173,33 @@ class ApplePassService
         $signaturePath = $workDir . '/signature';
 
         if (!openssl_pkcs7_sign($manifestPath, $signaturePath, $cert, $key, [], PKCS7_BINARY | PKCS7_DETACHED, $wwdrPath)) {
-            throw new \Exception('Failed to sign manifest with OpenSSL');
+            throw new \Exception('Failed to sign manifest with OpenSSL: ' . openssl_error_string());
         }
 
         // PKCS7 signing creates a MIME message, we need just the actual signature content
         $signatureContent = file_get_contents($signaturePath);
+
+        // Dynamic boundary-based extraction for better reliability
+        $search = 'base64';
+        $p1 = strpos($signatureContent, $search);
+        if ($p1 !== false) {
+            $p1 += strlen($search);
+            $p2 = strpos($signatureContent, '--', $p1);
+            if ($p2 !== false) {
+                $rawSignature = base64_decode(trim(substr($signatureContent, $p1, $p2 - $p1)));
+                file_put_contents($signaturePath, $rawSignature);
+                return;
+            }
+        }
+
+        // Fallback for different OpenSSL formats
         $parts = explode("\n\n", $signatureContent);
-        $rawSignature = base64_decode($parts[3]);
-        file_put_contents($signaturePath, $rawSignature);
+        if (isset($parts[3])) {
+            $rawSignature = base64_decode($parts[3]);
+            file_put_contents($signaturePath, $rawSignature);
+        } else {
+            throw new \Exception('Failed to extract signature content from PKCS7 message');
+        }
     }
 
     /**
