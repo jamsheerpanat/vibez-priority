@@ -22,7 +22,7 @@ class ApplePassService
             'logoText' => 'VIBEZ',
             'foregroundColor' => 'rgb(255, 255, 255)',
             'backgroundColor' => 'rgb(26, 15, 10)',
-            'labelColor' => 'rgba(212, 163, 115, 0.8)',
+            'labelColor' => 'rgb(212, 163, 115)',
             'eventTicket' => [
                 'primaryFields' => [
                     [
@@ -165,40 +165,28 @@ class ApplePassService
         $keyPath = storage_path('app/certs/apple_pass_key.pem');
         $wwdrPath = storage_path('app/certs/wwdr.pem');
 
-        $cert = file_get_contents($certPath);
-        $key = file_get_contents($keyPath);
-        $wwdr = file_get_contents($wwdrPath);
-
         $manifestPath = $workDir . '/manifest.json';
         $signaturePath = $workDir . '/signature';
 
-        if (!openssl_pkcs7_sign($manifestPath, $signaturePath, $cert, $key, [], PKCS7_BINARY | PKCS7_DETACHED, $wwdrPath)) {
-            throw new \Exception('Failed to sign manifest with OpenSSL: ' . openssl_error_string());
+        // Pass file paths directly to OpenSSL - more reliable than strings on some servers
+        if (!openssl_pkcs7_sign($manifestPath, $signaturePath, realpath($certPath), [realpath($keyPath), ""], [], PKCS7_BINARY | PKCS7_DETACHED, realpath($wwdrPath))) {
+            $error = openssl_error_string();
+            \Log::error("Apple Pass Signing Error: " . $error);
+            throw new \Exception('Failed to sign manifest with OpenSSL: ' . $error);
         }
 
         // PKCS7 signing creates a MIME message, we need just the actual signature content
         $signatureContent = file_get_contents($signaturePath);
 
-        // Dynamic boundary-based extraction for better reliability
-        $search = 'base64';
-        $p1 = strpos($signatureContent, $search);
-        if ($p1 !== false) {
-            $p1 += strlen($search);
-            $p2 = strpos($signatureContent, '--', $p1);
-            if ($p2 !== false) {
-                $rawSignature = base64_decode(trim(substr($signatureContent, $p1, $p2 - $p1)));
-                file_put_contents($signaturePath, $rawSignature);
-                return;
-            }
-        }
-
-        // Fallback for different OpenSSL formats
-        $parts = explode("\n\n", $signatureContent);
+        // Robust extraction: Find 'base64' then the actual content until the boundary
+        $parts = preg_split('/(?:\r?\n){2}/', $signatureContent);
         if (isset($parts[3])) {
-            $rawSignature = base64_decode($parts[3]);
+            // Remove MIME boundary if present at the end
+            $rawSignature = preg_replace('/--[a-zA-Z0-9\'()+ ,.\/:=?=_-]+--/', '', $parts[3]);
+            $rawSignature = base64_decode(trim($rawSignature));
             file_put_contents($signaturePath, $rawSignature);
         } else {
-            throw new \Exception('Failed to extract signature content from PKCS7 message');
+            throw new \Exception('Failed to extract signature content from PKCS7 message. Format unexpected.');
         }
     }
 
