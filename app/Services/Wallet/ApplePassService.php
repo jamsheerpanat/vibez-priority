@@ -17,7 +17,7 @@ class ApplePassService
             'passTypeIdentifier' => env('APPLE_PASS_TYPE_ID', 'pass.com.vibez.loyalty'),
             'serialNumber' => $walletCard->card_serial,
             'teamIdentifier' => env('APPLE_TEAM_ID', '2RZSDZ3JFQ'),
-            'organizationName' => 'Vibes Coffee',
+            'organizationName' => 'VIBEZ COFFEE',
             'description' => 'VIBEZ PREMIUM LOYALTY',
             'logoText' => 'VIBEZ COFFEE',
             'foregroundColor' => 'rgb(255, 255, 255)',

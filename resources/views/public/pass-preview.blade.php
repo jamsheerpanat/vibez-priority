@@ -147,7 +147,7 @@
     <div class="w-full max-w-sm">
         <div class="pass-card">
             <!-- New Vector Texture Background -->
-            <img src="/images/background-coffee.png" class="pass-bg-image" alt="Texture">
+            <img src="{{ asset('images/background-coffee.png') }}" class="pass-bg-image" alt="Texture">
             <div class="pass-overlay"></div>
 
             <!-- Single Logo Header -->
@@ -160,7 +160,7 @@
             <div class="hero-section">
                 <!-- Circular Thumbnail Logo -->
                 <div class="hero-logo-container">
-                    <img src="/images/icon.png" class="hero-logo" alt="Vibez">
+                    <img src="{{ asset('images/icon.png') }}" class="hero-logo" alt="Vibez">
                 </div>
             </div>
 
@@ -201,7 +201,7 @@
         <div class="mt-12 space-y-4">
             <div class="bg-white/5 border border-white/10 rounded-3xl p-6 text-center backdrop-blur-md">
                 <p class="text-xs uppercase tracking-widest text-white/40 mb-4">Optimized for VIBEZ Coffee Roasters</p>
-                <a href="/success/{{ $user->uuid }}"
+                <a href="{{ url('success/' . $user->uuid) }}"
                     class="block w-full py-4 bg-[#d4a373] text-[#2c1810] font-black rounded-xl hover:bg-[#c49363] transition shadow-lg text-sm tracking-widest">
                     BACK TO TERMINAL
                 </a>
