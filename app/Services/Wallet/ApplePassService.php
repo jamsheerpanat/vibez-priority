@@ -18,11 +18,11 @@ class ApplePassService
             'serialNumber' => $walletCard->card_serial,
             'teamIdentifier' => env('APPLE_TEAM_ID', '2RZSDZ3JFQ'),
             'organizationName' => 'VIBEZ COFFEE',
-            'description' => 'VIBEZ PREMIUM MEMBERSHIP',
+            'description' => 'VIBEZ MASTER PASS',
             'logoText' => 'VIBEZ',
             'foregroundColor' => 'rgb(255, 255, 255)',
             'backgroundColor' => 'rgb(26, 15, 10)',
-            'labelColor' => 'rgba(255, 255, 255, 0.5)',
+            'labelColor' => 'rgba(212, 163, 115, 0.8)',
             'eventTicket' => [
                 'primaryFields' => [
                     [
@@ -189,7 +189,7 @@ class ApplePassService
     private function ensureBasePassImages(string $workDir): void
     {
         $iconSource = public_path('images/icon.png');
-        $backgroundSource = public_path('images/background-coffee.png'); // Need a blurred coffee BG
+        $backgroundSource = public_path('images/pass-bg-premium.png');
         $thumbnailSource = public_path('images/icon.png'); // Use the logo in a circle (thumbnail)
 
         // Helper to copy if exists, else use placeholder
