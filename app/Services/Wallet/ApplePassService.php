@@ -181,14 +181,30 @@ class ApplePassService
         $keyPath = storage_path('app/certs/apple_pass_key.pem');
         $wwdrPath = storage_path('app/certs/wwdr.pem');
 
+        // Load certificate contents
+        $cert = file_get_contents($certPath);
+        $key = file_get_contents($keyPath);
+        $wwdr = file_get_contents($wwdrPath);
+
+        // Explicitly check if the private key is valid before signing
+        $privateKey = openssl_pkey_get_private($key);
+        if (!$privateKey) {
+            throw new \Exception('The private key (apple_pass_key.pem) is invalid or has a passphrase. Ensure it is a decrypted PEM file starting with -----BEGIN PRIVATE KEY-----');
+        }
+
         $manifestPath = $workDir . '/manifest.json';
         $signaturePath = $workDir . '/signature';
 
-        // Pass file paths directly to OpenSSL - more reliable than strings on some servers
-        if (!openssl_pkcs7_sign($manifestPath, $signaturePath, realpath($certPath), [realpath($keyPath), ""], [], PKCS7_BINARY | PKCS7_DETACHED, realpath($wwdrPath))) {
+        // Sign using the loaded certificate and private key resource
+        if (!openssl_pkcs7_sign($manifestPath, $signaturePath, $cert, $privateKey, [], PKCS7_BINARY | PKCS7_DETACHED, $wwdrPath)) {
             $error = openssl_error_string();
             \Log::error("Apple Pass Signing Error: " . $error);
             throw new \Exception('Failed to sign manifest with OpenSSL: ' . $error);
+        }
+
+        // Clean up the key resource
+        if (PHP_VERSION_ID < 80000) {
+            openssl_pkey_free($privateKey);
         }
 
         // PKCS7 signing creates a MIME message, we need just the actual signature content
@@ -202,7 +218,7 @@ class ApplePassService
             $rawSignature = base64_decode(trim($rawSignature));
             file_put_contents($signaturePath, $rawSignature);
         } else {
-            throw new \Exception('Failed to extract signature content from PKCS7 message. Format unexpected.');
+            throw new \Exception('Failed to extract signature content from PKCS7 message. OpenSSL format unexpected.');
         }
     }
 
