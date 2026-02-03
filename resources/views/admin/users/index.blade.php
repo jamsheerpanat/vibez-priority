@@ -73,9 +73,9 @@
                             </td>
                             <td class="px-8 py-5">
                                 <div class="flex items-center gap-4">
-                                    <a href="/admin/users/{{ $user->uuid }}" class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 hover:text-white transition">View</a>
+                                    <a href="{{ route('admin.users.show', $user->uuid) }}" class="text-[0.65rem] font-black uppercase tracking-widest text-white/40 hover:text-white transition">View</a>
                                     
-                                    <form action="/admin/users/{{ $user->uuid }}" method="POST" onsubmit="return confirm('Are you absolutely sure? This will permanently delete this member and all their digital passes.')">
+                                    <form action="{{ url('admin/users/' . $user->uuid) }}" method="POST" onsubmit="return confirm('Are you absolutely sure? This will permanently delete this member and all their digital passes.')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-[0.65rem] font-black uppercase tracking-widest text-red-900/40 hover:text-red-500 transition">Delete</button>

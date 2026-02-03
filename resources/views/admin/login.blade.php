@@ -115,7 +115,7 @@
         <div class="login-card p-10 pt-12">
             <!-- Branding -->
             <div class="logo-box">
-                <img src="/images/icon.png" class="w-[60%]" alt="Vibez">
+                <img src="{{ asset('images/icon.png') }}" class="w-[60%]" alt="Vibez">
             </div>
 
             <div class="text-center mb-10">
@@ -125,7 +125,7 @@
             </div>
 
             <!-- Login Form -->
-            <form action="/admin/login" method="POST" class="space-y-6">
+            <form action="{{ route('admin.login') }}" method="POST" class="space-y-6">
                 @csrf
 
                 @if($errors->any())

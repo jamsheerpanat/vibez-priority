@@ -82,14 +82,14 @@
         <aside class="sidebar w-64 flex-shrink-0 flex flex-col">
             <div class="p-8">
                 <div class="flex items-center gap-3 mb-2">
-                    <img src="/images/icon.png" class="w-8 h-8 rounded-lg bg-white p-1" alt="Vibez">
+                    <img src="{{ asset('images/icon.png') }}" class="w-8 h-8 rounded-lg bg-white p-1" alt="Vibez">
                     <h1 class="text-xl font-black tracking-tighter text-white">VIBEZ</h1>
                 </div>
                 <p class="text-[0.6rem] uppercase tracking-[0.3em] text-white/30 font-bold">HQ Control Center</p>
             </div>
 
             <nav class="mt-4 flex-1 space-y-1">
-                <a href="/admin/dashboard"
+                <a href="{{ route('admin.dashboard') }}"
                     class="nav-link flex items-center px-8 py-4 {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <svg class="w-5 h-5 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -99,7 +99,7 @@
                     <span class="text-sm font-bold tracking-wide uppercase">Dashboard</span>
                 </a>
 
-                <a href="/admin/users"
+                <a href="{{ route('admin.users') }}"
                     class="nav-link flex items-center px-8 py-4 {{ request()->is('admin/users*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -109,7 +109,7 @@
                     <span class="text-sm font-bold tracking-wide uppercase">Members</span>
                 </a>
 
-                <a href="/admin/cards"
+                <a href="{{ route('admin.cards') }}"
                     class="nav-link flex items-center px-8 py-4 {{ request()->is('admin/cards*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -119,7 +119,7 @@
                     <span class="text-sm font-bold tracking-wide uppercase">Passes</span>
                 </a>
 
-                <a href="/admin/zones"
+                <a href="{{ route('admin.zones') }}"
                     class="nav-link flex items-center px-8 py-4 {{ request()->is('admin/zones*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,7 +131,7 @@
                     <span class="text-sm font-bold tracking-wide uppercase">Zones</span>
                 </a>
 
-                <a href="/admin/logs"
+                <a href="{{ route('admin.logs') }}"
                     class="nav-link flex items-center px-8 py-4 {{ request()->is('admin/logs*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -143,7 +143,7 @@
             </nav>
 
             <div class="p-8 border-t border-white/5">
-                <form action="/admin/logout" method="POST">
+                <form action="{{ route('admin.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="flex items-center text-white/40 hover:text-white transition group">
                         <svg class="w-5 h-5 mr-3 group-hover:text-red-400" fill="none" stroke="currentColor"
@@ -171,7 +171,8 @@
                     <div class="flex items-center gap-4">
                         <div class="text-right">
                             <p class="text-xs font-black text-white uppercase">
-                                {{ auth('admin')->user()->name ?? 'Administrator' }}</p>
+                                {{ auth('admin')->user()->name ?? 'Administrator' }}
+                            </p>
                             <p class="text-[0.6rem] text-white/30 uppercase tracking-widest">Master Access</p>
                         </div>
                         <div

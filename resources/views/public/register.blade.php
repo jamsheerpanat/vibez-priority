@@ -112,14 +112,14 @@
 
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
     <!-- Background Design -->
-    <img src="/images/background-coffee.png" class="bg-vector" alt="Texture">
+    <img src="{{ asset('images/background-coffee.png') }}" class="bg-vector" alt="Texture">
     <div class="bg-overlay"></div>
 
     <div class="w-full max-w-lg mt-20">
         <div class="registration-card p-10 pt-1">
             <!-- Branding -->
             <div class="logo-circle">
-                <img src="/images/icon.png" class="w-[70%]" alt="Vibez">
+                <img src="{{ asset('images/icon.png') }}" class="w-[70%]" alt="Vibez">
             </div>
 
             <div class="text-center mb-10">
@@ -197,7 +197,7 @@
             const data = Object.fromEntries(formData);
 
             try {
-                const response = await fetch('/api/v1/register', {
+                const response = await fetch('{{ url("api/v1/register") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -209,7 +209,7 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    window.location.href = `/success/${result.user_uuid}`;
+                    window.location.href = `{{ url("success") }}/${result.user_uuid}`;
                 } else {
                     errorMessage.textContent = result.message || 'Registration failed';
                     errorMessage.classList.remove('hidden');

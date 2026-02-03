@@ -61,7 +61,7 @@
                 <div class="mt-10 space-y-3">
                     <div class="flex flex-wrap gap-2">
                         @if($user->status !== 'active')
-                            <form action="/admin/users/{{ $user->uuid }}/status" method="POST" class="flex-1">
+                            <form action="{{ url('admin/users/' . $user->uuid . '/status') }}" method="POST" class="flex-1">
                                 @csrf
                                 <input type="hidden" name="status" value="active">
                                 <button type="submit"
@@ -72,7 +72,7 @@
                         @endif
 
                         @if($user->status !== 'suspended')
-                            <form action="/admin/users/{{ $user->uuid }}/status" method="POST" class="flex-1">
+                            <form action="{{ url('admin/users/' . $user->uuid . '/status') }}" method="POST" class="flex-1">
                                 @csrf
                                 <input type="hidden" name="status" value="suspended">
                                 <button type="submit"
@@ -83,7 +83,7 @@
                         @endif
 
                         @if($user->status !== 'revoked')
-                            <form action="/admin/users/{{ $user->uuid }}/status" method="POST" class="flex-1">
+                            <form action="{{ url('admin/users/' . $user->uuid . '/status') }}" method="POST" class="flex-1">
                                 @csrf
                                 <input type="hidden" name="status" value="revoked">
                                 <button type="submit"
@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="pt-6 border-t border-white/5">
-                        <form action="/admin/users/{{ $user->uuid }}" method="POST"
+                        <form action="{{ url('admin/users/' . $user->uuid) }}" method="POST"
                             onsubmit="return confirm('EXTREME ACTION: Are you absolutely sure? This will permanently wipe this member from existence.')">
                             @csrf
                             @method('DELETE')
