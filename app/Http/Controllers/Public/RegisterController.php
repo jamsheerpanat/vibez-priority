@@ -74,56 +74,68 @@ class RegisterController extends Controller
                 }
             }
 
-            // Create user
-            $user = User::create([
-                'full_name' => $request->full_name,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-                'user_type' => $request->user_type ?? 'visitor',
-                'company_name' => $request->company_name,
-                'status' => 'active',
-                'registered_via_qr' => $request->src,
-            ]);
+            // Find or create user
+            $user = User::where('email', $request->email)
+                ->orWhere('mobile', $request->mobile)
+                ->first();
 
-            // Create wallet cards
-            $appleCard = WalletCard::create([
-                'user_id' => $user->id,
-                'platform' => 'apple',
-                'card_serial' => 'APPLE-' . strtoupper(Str::random(16)),
-                'status' => 'active',
-                'issued_at' => now(),
-            ]);
+            if ($user) {
+                // Update existing user
+                $user->update([
+                    'full_name' => $request->full_name,
+                    'user_type' => $request->user_type ?? $user->user_type,
+                    'status' => 'active',
+                ]);
+            } else {
+                // Create new user
+                $user = User::create([
+                    'full_name' => $request->full_name,
+                    'email' => $request->email,
+                    'mobile' => $request->mobile,
+                    'user_type' => $request->user_type ?? 'visitor',
+                    'company_name' => $request->company_name,
+                    'status' => 'active',
+                    'registered_via_qr' => $request->src,
+                ]);
 
-            $samsungCard = WalletCard::create([
-                'user_id' => $user->id,
-                'platform' => 'samsung',
-                'card_serial' => 'SAMSUNG-' . strtoupper(Str::random(16)),
-                'status' => 'active',
-                'issued_at' => now(),
-            ]);
+                // Create wallet cards only for new users
+                $appleCard = WalletCard::create([
+                    'user_id' => $user->id,
+                    'platform' => 'apple',
+                    'card_serial' => 'APPLE-' . strtoupper(Str::random(16)),
+                    'status' => 'active',
+                    'issued_at' => now(),
+                ]);
 
-            // Auto-create permissions based on QR source zone
-            if ($qrSource && $qrSource->assignedZone) {
-                $doors = $qrSource->assignedZone->doors;
-                $validFrom = now();
-                $validTo = now()->addDays(30);
+                $samsungCard = WalletCard::create([
+                    'user_id' => $user->id,
+                    'platform' => 'samsung',
+                    'card_serial' => 'SAMSUNG-' . strtoupper(Str::random(16)),
+                    'status' => 'active',
+                    'issued_at' => now(),
+                ]);
 
-                foreach ($doors as $door) {
-                    // Create permission for Apple card
-                    AccessPermission::create([
-                        'wallet_card_id' => $appleCard->id,
-                        'door_id' => $door->id,
-                        'valid_from' => $validFrom,
-                        'valid_to' => $validTo,
-                    ]);
+                // Auto-create permissions based on QR source zone
+                if ($qrSource && $qrSource->assignedZone) {
+                    $doors = $qrSource->assignedZone->doors;
+                    $validFrom = now();
+                    $validTo = now()->addDays(30);
 
-                    // Create permission for Samsung card
-                    AccessPermission::create([
-                        'wallet_card_id' => $samsungCard->id,
-                        'door_id' => $door->id,
-                        'valid_from' => $validFrom,
-                        'valid_to' => $validTo,
-                    ]);
+                    foreach ($doors as $door) {
+                        AccessPermission::create([
+                            'wallet_card_id' => $appleCard->id,
+                            'door_id' => $door->id,
+                            'valid_from' => $validFrom,
+                            'valid_to' => $validTo,
+                        ]);
+
+                        AccessPermission::create([
+                            'wallet_card_id' => $samsungCard->id,
+                            'door_id' => $door->id,
+                            'valid_from' => $validFrom,
+                            'valid_to' => $validTo,
+                        ]);
+                    }
                 }
             }
 
